@@ -261,7 +261,7 @@ impl ResolveContract {
         let market = get_market(&env, market_id)?;
         let mut position = get_position(&env, market_id, &user);
 
-        let amount = claimable_amount(&market, &position)?;
+        let amount = claimable_amount(&env, &market, &position)?;
         let kind = match settlement_for(&market)? {
             Settlement::Refund => ClaimKind::Refund,
             Settlement::Payout { .. } => ClaimKind::Payout,
@@ -298,7 +298,7 @@ impl ResolveContract {
     pub fn get_claimable(env: Env, market_id: u64, user: Address) -> Result<i128, Error> {
         let market = get_market(&env, market_id)?;
         let position = get_position(&env, market_id, &user);
-        claimable_amount(&market, &position)
+        claimable_amount(&env, &market, &position)
     }
 
     pub fn next_market_id(env: Env) -> u64 {

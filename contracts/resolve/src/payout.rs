@@ -1,5 +1,6 @@
 use crate::errors::Error;
 use crate::types::{Market, MarketOutcome, MarketStatus, Outcome, Position};
+use soroban_sdk::{Env, U256};
 
 /// Settlement mode for a finalized market.
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
@@ -59,7 +60,7 @@ pub fn settlement_for(market: &Market) -> Result<Settlement, Error> {
 /// ```
 /// Dust from flooring remains in the contract and is not claimable by anyone.
 /// Refunds return `yes_amount + no_amount` exactly.
-pub fn claimable_amount(market: &Market, position: &Position) -> Result<i128, Error> {
+pub fn claimable_amount(env: &Env, market: &Market, position: &Position) -> Result<i128, Error> {
     if position.claimed {
         return Err(Error::AlreadyClaimed);
     }
@@ -85,11 +86,27 @@ pub fn claimable_amount(market: &Market, position: &Position) -> Result<i128, Er
                 .checked_add(market.no_pool)
                 .ok_or(Error::Overflow)?;
 
-            // Floor: (user_win * total_pool) / win_pool
-            let numerator = user_win.checked_mul(total_pool).ok_or(Error::Overflow)?;
-            Ok(numerator / win_pool)
+            mul_div_floor(env, user_win, total_pool, win_pool)
         }
     }
+}
+
+/// Calculate `floor(a * b / denominator)` without overflowing `i128` during
+/// the intermediate multiplication. Contract token amounts are non-negative,
+/// so the unsigned host integer is an exact fit for the calculation.
+fn mul_div_floor(env: &Env, a: i128, b: i128, denominator: i128) -> Result<i128, Error> {
+    if a < 0 || b < 0 || denominator <= 0 {
+        return Err(Error::InvalidAmount);
+    }
+
+    let result = U256::from_u128(env, a as u128)
+        .mul(&U256::from_u128(env, b as u128))
+        .div(&U256::from_u128(env, denominator as u128));
+
+    result
+        .to_u128()
+        .and_then(|value| i128::try_from(value).ok())
+        .ok_or(Error::Overflow)
 }
 
 #[cfg(test)]
@@ -133,7 +150,7 @@ mod tests {
             claimed: false,
         };
         // 250 * 1500 / 1000 = 375
-        assert_eq!(claimable_amount(&m, &p).unwrap(), 375);
+        assert_eq!(claimable_amount(&env, &m, &p).unwrap(), 375);
     }
 
     #[test]
@@ -146,7 +163,7 @@ mod tests {
             claimed: false,
         };
         // 1 * 4 / 3 = 1 (floor); residual 1 unit of dust across three winners possible
-        assert_eq!(claimable_amount(&m, &p).unwrap(), 1);
+        assert_eq!(claimable_amount(&env, &m, &p).unwrap(), 1);
     }
 
     #[test]
@@ -158,7 +175,7 @@ mod tests {
             no_amount: 10,
             claimed: false,
         };
-        assert_eq!(claimable_amount(&m, &p).unwrap(), 50);
+        assert_eq!(claimable_amount(&env, &m, &p).unwrap(), 50);
     }
 
     #[test]
