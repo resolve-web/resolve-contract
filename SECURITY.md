@@ -6,7 +6,7 @@ Resolve contracts are **unaudited** open-source software. Treat them as experime
 
 ## Reporting a vulnerability
 
-Email **security@resolve.local** with:
+Use [GitHub private vulnerability reporting](https://github.com/resolve-web/resolve-contract/security/advisories/new) with:
 
 - Affected repository and commit/tag
 - Description of the issue and impact (funds at risk, permanent lock, auth bypass)
