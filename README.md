@@ -80,7 +80,7 @@ If the market resolves YES but `yes_pool == 0` (only NO was staked), or resolves
 | `resolve(..., Invalid)` | Designated resolver | After `close_at` | Full refund of deposits |
 | `invalidate(...)` | Any authorized caller | After `close_at + resolution_timeout` | Full refund of deposits |
 
-`resolution_timeout` is configured per market at creation (minimum 1 hour, maximum 365 days). This prevents a missing resolver from trapping funds forever.
+`resolution_timeout` is configured per market at creation (minimum 1 hour, maximum 30 days). A market may close at most 120 days after creation. These limits fit the full lifecycle inside the contract's 180-day persistent-storage TTL window and prevent a missing resolver from trapping funds forever.
 
 ## Contract interface
 
@@ -143,6 +143,15 @@ stellar contract deploy \
 ```
 
 Record the contract id and set it in resolve-sdk / resolve-app / resolve-indexer env files.
+
+For a reproducible deployment that also records the WASM hash and shared configuration:
+
+```powershell
+./scripts/deploy-testnet.ps1 -SourceAccount deployer -SettlementTokenId C...
+./scripts/verify-testnet.ps1
+```
+
+Commit `deployments/testnet.json` after verifying it. The manifest is consumed by the SDK and provides one reviewable source for app and indexer configuration.
 
 ## Testing
 
