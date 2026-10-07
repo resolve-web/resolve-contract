@@ -1,11 +1,7 @@
-use soroban_sdk::{
-    contract, contractimpl, token::TokenClient, Address, Env, String,
-};
+use soroban_sdk::{contract, contractimpl, token::TokenClient, Address, Env, String};
 
 use crate::errors::Error;
-use crate::events::{
-    ClaimKind, Claimed, MarketCreated, MarketInvalidated, MarketResolved, Staked,
-};
+use crate::events::{ClaimKind, Claimed, MarketCreated, MarketInvalidated, MarketResolved, Staked};
 use crate::payout::{claimable_amount, settlement_for, Settlement};
 use crate::storage::{
     bump_instance, get_market, get_position, next_market_id, save_market, save_position,
@@ -123,16 +119,10 @@ impl ResolveContract {
 
         match side {
             Side::Yes => {
-                market.yes_pool = market
-                    .yes_pool
-                    .checked_add(amount)
-                    .ok_or(Error::Overflow)?;
+                market.yes_pool = market.yes_pool.checked_add(amount).ok_or(Error::Overflow)?;
             }
             Side::No => {
-                market.no_pool = market
-                    .no_pool
-                    .checked_add(amount)
-                    .ok_or(Error::Overflow)?;
+                market.no_pool = market.no_pool.checked_add(amount).ok_or(Error::Overflow)?;
             }
         }
 

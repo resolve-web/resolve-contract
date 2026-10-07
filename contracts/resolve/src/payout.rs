@@ -126,13 +126,7 @@ mod tests {
     #[test]
     fn payout_yes_proportional() {
         let env = Env::default();
-        let m = market_fixture(
-            &env,
-            1000,
-            500,
-            MarketStatus::Resolved,
-            MarketOutcome::Yes,
-        );
+        let m = market_fixture(&env, 1000, 500, MarketStatus::Resolved, MarketOutcome::Yes);
         let p = Position {
             yes_amount: 250,
             no_amount: 0,

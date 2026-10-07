@@ -1,8 +1,7 @@
 #![cfg(test)]
 
 use crate::{
-    MarketOutcome, MarketStatus, Outcome, ResolveContract, Side, Error,
-    MIN_RESOLUTION_TIMEOUT_SECS,
+    Error, MarketOutcome, MarketStatus, Outcome, ResolveContract, Side, MIN_RESOLUTION_TIMEOUT_SECS,
 };
 use soroban_sdk::{
     testutils::{Address as _, Ledger, LedgerInfo},
@@ -225,20 +224,17 @@ fn stake_rejects_zero_and_closed() {
     let id = ctx.create_default_market(5_000);
 
     assert_eq!(
-        ctx.client()
-            .try_stake(&ctx.alice, &id, &Side::Yes, &0),
+        ctx.client().try_stake(&ctx.alice, &id, &Side::Yes, &0),
         Err(Ok(Error::InvalidAmount))
     );
     assert_eq!(
-        ctx.client()
-            .try_stake(&ctx.alice, &id, &Side::Yes, &-1),
+        ctx.client().try_stake(&ctx.alice, &id, &Side::Yes, &-1),
         Err(Ok(Error::InvalidAmount))
     );
 
     ctx.set_time(5_000);
     assert_eq!(
-        ctx.client()
-            .try_stake(&ctx.alice, &id, &Side::Yes, &10),
+        ctx.client().try_stake(&ctx.alice, &id, &Side::Yes, &10),
         Err(Ok(Error::MarketClosed))
     );
 }
@@ -247,8 +243,7 @@ fn stake_rejects_zero_and_closed() {
 fn stake_rejects_missing_market() {
     let ctx = TestCtx::new();
     assert_eq!(
-        ctx.client()
-            .try_stake(&ctx.alice, &99, &Side::Yes, &10),
+        ctx.client().try_stake(&ctx.alice, &99, &Side::Yes, &10),
         Err(Ok(Error::MarketNotFound))
     );
 }
@@ -356,8 +351,7 @@ fn permissionless_invalidate_after_timeout() {
 
     ctx.set_time(close_at);
     assert_eq!(
-        ctx.client()
-            .try_invalidate(&ctx.carol, &id),
+        ctx.client().try_invalidate(&ctx.carol, &id),
         Err(Ok(Error::ResolutionTimeoutNotReached))
     );
 
@@ -493,8 +487,7 @@ fn stake_after_resolve_fails() {
     ctx.set_time(5_000);
     ctx.client().resolve(&id, &Outcome::Yes);
     assert_eq!(
-        ctx.client()
-            .try_stake(&ctx.alice, &id, &Side::Yes, &10),
+        ctx.client().try_stake(&ctx.alice, &id, &Side::Yes, &10),
         Err(Ok(Error::MarketClosed))
     );
 }
