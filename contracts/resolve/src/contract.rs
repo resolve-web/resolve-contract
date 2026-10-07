@@ -44,7 +44,7 @@ impl ResolveContract {
         creator.require_auth();
         bump_instance(&env);
 
-        if question.len() == 0 || question.len() > MAX_QUESTION_LEN {
+        if question.is_empty() || question.len() > MAX_QUESTION_LEN {
             return Err(Error::InvalidQuestion);
         }
         if description.len() > MAX_DESCRIPTION_LEN {
@@ -58,8 +58,8 @@ impl ResolveContract {
         if close_at > now.saturating_add(MAX_MARKET_DURATION_SECS) {
             return Err(Error::InvalidMarketConfig);
         }
-        if resolution_timeout < MIN_RESOLUTION_TIMEOUT_SECS
-            || resolution_timeout > MAX_RESOLUTION_TIMEOUT_SECS
+        if !(MIN_RESOLUTION_TIMEOUT_SECS..=MAX_RESOLUTION_TIMEOUT_SECS)
+            .contains(&resolution_timeout)
         {
             return Err(Error::InvalidMarketConfig);
         }
@@ -153,7 +153,7 @@ impl ResolveContract {
         save_position(&env, market_id, &user, &position);
 
         let token = TokenClient::new(&env, &market.token);
-        token.transfer(&user, &env.current_contract_address(), &amount);
+        token.transfer(&user, env.current_contract_address(), &amount);
 
         Staked {
             market_id,

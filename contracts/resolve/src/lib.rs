@@ -1,4 +1,6 @@
 #![no_std]
+// Soroban exports Env plus seven ABI parameters for create_market.
+#![allow(clippy::too_many_arguments)]
 
 mod contract;
 mod errors;

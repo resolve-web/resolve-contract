@@ -1,5 +1,5 @@
 use crate::errors::Error;
-use crate::types::{Market, MarketOutcome, MarketStatus, Outcome, Position};
+use crate::types::{Market, MarketStatus, Outcome, Position};
 use soroban_sdk::{Env, U256};
 
 /// Settlement mode for a finalized market.
@@ -112,7 +112,7 @@ fn mul_div_floor(env: &Env, a: i128, b: i128, denominator: i128) -> Result<i128,
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::MarketStatus;
+    use crate::types::{MarketOutcome, MarketStatus};
     use soroban_sdk::{testutils::Address as _, Address, Env, String};
 
     fn market_fixture(
