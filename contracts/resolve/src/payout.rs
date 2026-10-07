@@ -167,6 +167,25 @@ mod tests {
     }
 
     #[test]
+    fn payout_handles_i128_scale_intermediate_product() {
+        let env = Env::default();
+        let winning = i128::MAX / 2 + 1;
+        let m = market_fixture(
+            &env,
+            winning,
+            i128::MAX / 2,
+            MarketStatus::Resolved,
+            MarketOutcome::Yes,
+        );
+        let p = Position {
+            yes_amount: winning,
+            no_amount: 0,
+            claimed: false,
+        };
+        assert_eq!(claimable_amount(&env, &m, &p).unwrap(), i128::MAX);
+    }
+
+    #[test]
     fn refund_on_invalid() {
         let env = Env::default();
         let m = market_fixture(&env, 100, 50, MarketStatus::Invalid, MarketOutcome::Invalid);
