@@ -1,7 +1,8 @@
 #![cfg(test)]
 
 use crate::{
-    Error, MarketOutcome, MarketStatus, Outcome, ResolveContract, Side, MIN_RESOLUTION_TIMEOUT_SECS,
+    Error, MarketOutcome, MarketStatus, Outcome, ResolveContract, Side, MAX_MARKET_DURATION_SECS,
+    MAX_RESOLUTION_TIMEOUT_SECS, MIN_RESOLUTION_TIMEOUT_SECS,
 };
 use soroban_sdk::{
     testutils::{Address as _, Ledger, LedgerInfo},
@@ -125,6 +126,38 @@ fn create_market_rejects_short_window() {
 }
 
 #[test]
+fn create_market_accepts_maximum_lifetime() {
+    let ctx = TestCtx::new();
+    ctx.set_time(1_000);
+    let result = ctx.client().try_create_market(
+        &ctx.creator,
+        &ctx.resolver,
+        &String::from_str(&ctx.env, "q"),
+        &String::from_str(&ctx.env, ""),
+        &ctx.token,
+        &(1_000 + MAX_MARKET_DURATION_SECS),
+        &MAX_RESOLUTION_TIMEOUT_SECS,
+    );
+    assert_eq!(result, Ok(Ok(1)));
+}
+
+#[test]
+fn create_market_rejects_lifetime_beyond_storage_policy() {
+    let ctx = TestCtx::new();
+    ctx.set_time(1_000);
+    let result = ctx.client().try_create_market(
+        &ctx.creator,
+        &ctx.resolver,
+        &String::from_str(&ctx.env, "q"),
+        &String::from_str(&ctx.env, ""),
+        &ctx.token,
+        &(1_000 + MAX_MARKET_DURATION_SECS + 1),
+        &MIN_RESOLUTION_TIMEOUT_SECS,
+    );
+    assert_eq!(result, Err(Ok(Error::InvalidMarketConfig)));
+}
+
+#[test]
 fn create_market_rejects_empty_question() {
     let ctx = TestCtx::new();
     ctx.set_time(1_000);
@@ -154,6 +187,17 @@ fn create_market_rejects_bad_timeout() {
         &60, // below MIN
     );
     assert_eq!(result, Err(Ok(Error::InvalidMarketConfig)));
+
+    let too_long = ctx.client().try_create_market(
+        &ctx.creator,
+        &ctx.resolver,
+        &String::from_str(&ctx.env, "q"),
+        &String::from_str(&ctx.env, ""),
+        &ctx.token,
+        &(1_000 + 3_600),
+        &(MAX_RESOLUTION_TIMEOUT_SECS + 1),
+    );
+    assert_eq!(too_long, Err(Ok(Error::InvalidMarketConfig)));
 }
 
 #[test]
