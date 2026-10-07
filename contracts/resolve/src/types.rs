@@ -9,19 +9,23 @@ pub const MAX_DESCRIPTION_LEN: u32 = 1024;
 /// Minimum staking window: close_at must be at least this many seconds after creation.
 pub const MIN_MARKET_DURATION_SECS: u64 = 60;
 
-/// Maximum resolution timeout after close (365 days).
-pub const MAX_RESOLUTION_TIMEOUT_SECS: u64 = 365 * 24 * 60 * 60;
+/// Maximum staking window (120 days). Together with the resolution window this
+/// keeps the complete market lifecycle inside the network's maximum TTL.
+pub const MAX_MARKET_DURATION_SECS: u64 = 120 * 24 * 60 * 60;
+
+/// Maximum resolution timeout after close (30 days).
+pub const MAX_RESOLUTION_TIMEOUT_SECS: u64 = 30 * 24 * 60 * 60;
 
 /// Minimum resolution timeout after close (1 hour) so resolvers have a window
 /// before permissionless invalidation is available.
 pub const MIN_RESOLUTION_TIMEOUT_SECS: u64 = 3600;
 
-/// Ledger TTL bump parameters (~30 day threshold, ~120 day extend-to).
+/// Ledger TTL bump parameters (~30 day threshold, ~180 day extend-to).
 pub const DAY_IN_LEDGERS: u32 = 17_280;
 pub const INSTANCE_BUMP_THRESHOLD: u32 = 30 * DAY_IN_LEDGERS;
-pub const INSTANCE_BUMP_TO: u32 = 120 * DAY_IN_LEDGERS;
+pub const INSTANCE_BUMP_TO: u32 = 180 * DAY_IN_LEDGERS;
 pub const PERSISTENT_BUMP_THRESHOLD: u32 = 30 * DAY_IN_LEDGERS;
-pub const PERSISTENT_BUMP_TO: u32 = 120 * DAY_IN_LEDGERS;
+pub const PERSISTENT_BUMP_TO: u32 = 180 * DAY_IN_LEDGERS;
 
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]

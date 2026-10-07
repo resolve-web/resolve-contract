@@ -9,8 +9,8 @@ use crate::storage::{
 };
 use crate::types::{
     Market, MarketOutcome, MarketStatus, Outcome, Position, Side, MAX_DESCRIPTION_LEN,
-    MAX_QUESTION_LEN, MAX_RESOLUTION_TIMEOUT_SECS, MIN_MARKET_DURATION_SECS,
-    MIN_RESOLUTION_TIMEOUT_SECS,
+    MAX_MARKET_DURATION_SECS, MAX_QUESTION_LEN, MAX_RESOLUTION_TIMEOUT_SECS,
+    MIN_MARKET_DURATION_SECS, MIN_RESOLUTION_TIMEOUT_SECS,
 };
 
 #[contract]
@@ -53,6 +53,9 @@ impl ResolveContract {
 
         let now = env.ledger().timestamp();
         if close_at < now.saturating_add(MIN_MARKET_DURATION_SECS) {
+            return Err(Error::InvalidMarketConfig);
+        }
+        if close_at > now.saturating_add(MAX_MARKET_DURATION_SECS) {
             return Err(Error::InvalidMarketConfig);
         }
         if resolution_timeout < MIN_RESOLUTION_TIMEOUT_SECS
