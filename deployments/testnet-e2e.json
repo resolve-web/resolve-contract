@@ -1,0 +1,17 @@
+{
+  "network": "testnet",
+  "contractId": "CD3YJNAYKVKT72DYPVS644OPNVNW6673TUIQWGXXA4VQD7536ARWB6MZ",
+  "marketId": 1,
+  "testAccount": "GCV2DZ37BEWBXA37HJUP3YXUMVRZSOB5M67AY2E3EBP7ICAWSNKWW526",
+  "settlementTokenId": "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+  "stakeAmount": "10000000",
+  "outcome": "Yes",
+  "claimAmount": "10000000",
+  "transactions": {
+    "createMarket": "bf1872460a1b7024c3a75e78cec92bc364957c50fa5abec8603728cdac5155e3",
+    "stake": "4a9c0b824a220b6ae655aac2554a112847dbe1b5002bb43130ddbfe7f5dac6f8",
+    "resolve": "626a03b38a635624ff4ce1a1ec2bd652a8f73822a424c44667a358736aaee298",
+    "claim": "5d15a5a17d4418555c874e14f8805df06fd208a15d9d1d7774d73522af48a0dc"
+  },
+  "verifiedAt": "2026-10-08T23:04:00+01:00"
+}

@@ -153,6 +153,8 @@ For a reproducible deployment that also records the WASM hash and shared configu
 
 Commit `deployments/testnet.json` after verifying it. The manifest is consumed by the SDK and provides one reviewable source for app and indexer configuration.
 
+The repository also records a completed create → stake → resolve → claim lifecycle in [`deployments/testnet-e2e.json`](deployments/testnet-e2e.json), including public Stellar testnet transaction hashes.
+
 ## Testing
 
 ```bash
