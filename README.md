@@ -20,9 +20,9 @@ Sibling repositories:
 
 | Repo | Role |
 |------|------|
-| [resolve-sdk](../resolve-sdk) | TypeScript client |
-| [resolve-indexer](../resolve-indexer) | Event indexer + query API |
-| [resolve-app](../resolve-app) | Reference web application |
+| [resolve-sdk](https://github.com/resolve-web/resolve-sdk) | TypeScript client |
+| [resolve-indexer](https://github.com/resolve-web/resolve-indexer) | Event indexer + query API |
+| [resolve-app](https://github.com/resolve-web/resolve-app) | Reference web application |
 
 ## Market lifecycle
 
