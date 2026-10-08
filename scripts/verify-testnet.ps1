@@ -1,4 +1,7 @@
-param([string]$Manifest = "deployments/testnet.json")
+param(
+  [Parameter(Mandatory = $true)][string]$SourceAccount,
+  [string]$Manifest = "deployments/testnet.json"
+)
 
 $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent $PSScriptRoot
@@ -9,6 +12,7 @@ if ($deployment.contractId -notmatch '^C[A-Z2-7]{55}$') { throw "Manifest contra
 
 $nextId = stellar contract invoke `
   --id $deployment.contractId `
+  --source-account $SourceAccount `
   --network $deployment.network `
   -- `
   next_market_id

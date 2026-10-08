@@ -148,7 +148,7 @@ For a reproducible deployment that also records the WASM hash and shared configu
 
 ```powershell
 ./scripts/deploy-testnet.ps1 -SourceAccount deployer -SettlementTokenId C...
-./scripts/verify-testnet.ps1
+./scripts/verify-testnet.ps1 -SourceAccount deployer
 ```
 
 Commit `deployments/testnet.json` after verifying it. The manifest is consumed by the SDK and provides one reviewable source for app and indexer configuration.
