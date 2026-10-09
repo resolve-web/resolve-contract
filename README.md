@@ -2,6 +2,8 @@
 
 Binary YES/NO prediction markets on Stellar (Soroban).
 
+**Testnet preview:** [`v0.1.0`](https://github.com/resolve-web/resolve-contract/releases/tag/v0.1.0) · [contract on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CD3YJNAYKVKT72DYPVS644OPNVNW6673TUIQWGXXA4VQD7536ARWB6MZ)
+
 This repository is the **source of truth** for financial state and protocol rules. Applications should treat on-chain balances and claim results as authoritative; indexers and UIs are caches and conveniences only.
 
 ## What Resolve is
