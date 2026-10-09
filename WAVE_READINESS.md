@@ -16,9 +16,17 @@ Resolve is a four-repository open-source Stellar project. Apply the repositories
 - Contract CI: formatting, clippy with warnings denied, and 33 tests
 - SDK CI: typecheck, dual ESM/CJS package build, and 44 tests
 - Indexer CI: Node 22 build and 19 tests
-- App CI: production Next.js build, typecheck, and 13 tests
+- App CI: deterministic install, production Next.js build, typecheck, 15 tests, and a production dependency audit
 
-Each repository is public, Apache-2.0 licensed, has contribution and security guidance, uses protected `main`, and has an actionable issue backlog. Financial behavior is documented explicitly, including resolver trust, invalidation, payout flooring, zero-sided refunds, storage TTL constraints, and the unaudited status.
+Each repository is public, Apache-2.0 licensed, has contribution and security guidance, uses protected `main` with required CI checks, and has an actionable issue backlog. Financial behavior is documented explicitly, including resolver trust, invalidation, payout flooring, zero-sided refunds, storage TTL constraints, and the unaudited status.
+
+## Public services
+
+- App: `https://resolveit-app.vercel.app`
+- Indexer health: `https://resolve-indexer.onrender.com/health`
+- Indexer readiness: `https://resolve-indexer.onrender.com/ready`
+
+Before submitting, verify all three URLs return successfully and complete the wallet flow in `resolve-app/docs/DEMO.md`.
 
 ## Drips onboarding
 
